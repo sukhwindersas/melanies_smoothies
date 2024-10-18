@@ -1,5 +1,6 @@
 # Import python packages
 import streamlit as st
+import requests
 from snowflake.snowpark.functions import col
 cnx=st.connection("snowflake")
 session=cnx.session()
@@ -29,6 +30,9 @@ if ingredients_list:
     my_insert_stmt = """ insert into smoothies.public.orders(ingredients)
                              values ('""" + ingredients_string + """')"""
     #st.write(my_insert_stmt)
+    fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
+    st.text(fruityvice_response)
+
     time_to_insert = st.button('Submit Order')
     if time_to_insert:
         session.sql(my_insert_stmt).collect()
